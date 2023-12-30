@@ -1,0 +1,72 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class PlaceOrderTest {
+    public static void main(String[] args) {
+        // Set the path to your ChromeDriver executable
+        System.setProperty("webdriver.chrome.driver", "path_to_chromedriver.exe");
+
+        // Instantiate ChromeDriver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the website
+        driver.get("https://automationexercise.com/");
+
+        // Add a product to the cart
+        WebElement addToCartButton = driver.findElement(By.xpath("//button[contains(text(), 'Add to Cart')]"));
+        addToCartButton.click();
+
+        // Navigate to the cart page
+        WebElement cartLink = driver.findElement(By.xpath("//a[@href='/cart']"));
+        cartLink.click();
+
+        // Proceed to checkout
+        WebElement checkoutButton = driver.findElement(By.xpath("//a[@href='/checkout']"));
+        checkoutButton.click();
+
+        // Check the "Create an account?" checkbox
+        WebElement createAccountCheckbox = driver.findElement(By.id("createaccount"));
+        createAccountCheckbox.click();
+
+        // Fill in the required registration information
+        WebElement firstNameInput = driver.findElement(By.id("reg_billing_first_name"));
+        firstNameInput.sendKeys("John");
+
+        WebElement lastNameInput = driver.findElement(By.id("reg_billing_last_name"));
+        lastNameInput.sendKeys("Doe");
+
+        WebElement emailInput = driver.findElement(By.id("reg_email"));
+        emailInput.sendKeys("john.doe@example.com");
+
+        WebElement passwordInput = driver.findElement(By.id("reg_password"));
+        passwordInput.sendKeys("password123");
+
+        // Submit the registration form
+        WebElement registerButton = driver.findElement(By.xpath("//button[contains(text(), 'Register')]"));
+        registerButton.click();
+
+        // Fill in the required information on the checkout page
+        WebElement addressInput = driver.findElement(By.id("billing_address_1"));
+        addressInput.sendKeys("123 Main St");
+
+        // Submit the checkout form
+        WebElement placeOrderButton = driver.findElement(By.xpath("//button[contains(text(), 'Place Order')]"));
+        placeOrderButton.click();
+
+        // Verify that the order is successfully placed
+        WebElement orderConfirmationMessage = driver.findElement(By.xpath("//div[@class='woocommerce-notice woocommerce-notice--success']"));
+        String expectedMessage = "Thank you. Your order has been received.";
+        String actualMessage = orderConfirmationMessage.getText();
+
+        if (actualMessage.equals(expectedMessage)) {
+            System.out.println("Order is successfully placed.");
+        } else {
+            System.out.println("Order is not successfully placed.");
+        }
+
+        // Close the browser
+        driver.quit();
+    }
+}
